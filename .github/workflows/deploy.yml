@@ -7,7 +7,7 @@ on:
     - feature/github-actions
     - feature/jenkins
 
-  pull_requests:
+  pull_request:
    branches:
     - feature/deployment
     - feature/github-actions
