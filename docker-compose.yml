@@ -1,0 +1,25 @@
+services:
+
+ react-app:
+  image: react-lab:v1
+  build:
+   context: .
+   dockerfile: Dockerfile.dev
+  container_name: react-container
+  volumes:
+   - /app/node_modules
+   - .:/app
+  ports:
+   - 3000:3000
+  restart: on-failure
+
+ test:
+  build:
+   context: .
+   dockerfile: Dockerfile.dev
+
+  volumes:
+   - /app/node_modules
+   - .:/app
+
+  command: ["npm", "run", "test"]  
