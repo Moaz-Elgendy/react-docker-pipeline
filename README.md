@@ -1,70 +1,134 @@
-# Getting Started with Create React App
+# React Docker Pipeline
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A sample React application used to demonstrate modern DevOps practices including Docker, Docker Compose, GitHub Actions Continuous Integration (CI), and Docker-based deployment workflows.
 
-## Available Scripts
+## Technologies
 
-In the project directory, you can run:
+* React
+* Docker
+* Docker Compose
+* GitHub Actions
+* Nginx
+* Node.js
 
-### `npm start`
+## Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```text
+.
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+├── Dockerfile
+├── Dockerfile.dev
+├── docker-compose.yml
+├── package.json
+└── src/
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Development
 
-### `npm test`
+### Install dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+### Start the development server
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm run start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application will be available at:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```text
+http://localhost:3000
+```
 
-### `npm run eject`
+## Testing
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Run the React test suite:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run test
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The GitHub Actions CI pipeline executes the tests automatically inside a Docker container.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Production Build
 
-## Learn More
+Generate the optimized production build:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm run build
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The production build is placed inside the `build/` directory.
 
-### Code Splitting
+## Docker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Build the development image
 
-### Analyzing the Bundle Size
+```bash
+docker build -t react-lab:v1 -f Dockerfile.dev .
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Build the production image
 
-### Making a Progressive Web App
+```bash
+docker build -t react-lab:prod .
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Docker Compose
 
-### Advanced Configuration
+Start the development environment:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+docker compose up
+```
 
-### Deployment
+Stop the environment:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+docker compose down
+```
 
-### `npm run build` fails to minify
+## Continuous Integration (CI)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The project uses GitHub Actions to automate Continuous Integration.
+
+Current pipeline:
+
+* Checkout repository
+* Build Docker development image
+* Run React tests inside a Docker container
+
+The workflow is located at:
+
+```text
+.github/workflows/deploy.yml
+```
+
+> This workflow currently implements the CI stage. Deployment (CD) will be added in a later phase.
+
+## Continuous Deployment (Planned)
+
+The next phase of the project will include:
+
+* Build production Docker image
+* Push image to Docker Hub
+* Deploy to an AWS EC2 instance
+* Automatically update the running Docker container
+
+## Learning Objectives
+
+This project demonstrates:
+
+* Containerizing React applications
+* Multi-stage Docker builds
+* Docker Compose for development
+* Bind mounts and Docker volumes
+* React testing inside Docker containers
+* GitHub Actions CI pipelines
+* Production-ready Docker images using Nginx
+
