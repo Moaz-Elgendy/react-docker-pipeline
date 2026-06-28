@@ -16,11 +16,11 @@ pipeline {
             steps{
                 script{
                     env.DOCKER_BUILDKIT = 1
-                    sh 'docker run -e CI=true mk0230/docker-react npm run start'
+                    sh 'docker run -e CI=true mk0230/docker-react npm run test'
                 }
             }
         }
-        
+
 
     }
 
