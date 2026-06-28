@@ -7,7 +7,7 @@ pipeline {
         
         stage('build from a docker file'){
             steps{
-                scripts{
+                script{
                     sh 'docker build -t mk0230/docker-react -f Dockerfile.dev .'
                 }
             }
