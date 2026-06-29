@@ -22,9 +22,6 @@ jobs:
 
     - name: Run Tests
       run: docker run -e CI=true react-lab-test npm run test 
-  
-    - name: Build Deployment Docker Image
-      run: docker build -t react-lab-deploy .
 
     - name: Install Dependencies
       run: npm install
@@ -33,7 +30,7 @@ jobs:
       run: npm run build  
 
     - name: Create Deployment Artifact
-      run: zip -r react-build.zip build
+      run: zip -r react-build.zip build Dockerfile docker-compose.prod.yml
 
     - name: Verify Artifact
       run: ls -lh | grep react-build.zip
@@ -54,10 +51,22 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_SSH_KEY }}
-        script:
-          echo "Connected to EC2!"
-          pwd
-          ls
-#test          
+        script: |
+          mkdir -p ~/deployment
+
+          cd ~/deployment
+
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/react-build.zip .
+
+          unzip -o react-build.zip
+
+          sudo rm -f react-build.zip
+
+          docker compose -f docker-compose.prod.yml down || true
+
+          docker compose -f docker-compose.prod.yml up -d --build
+
+          echo "Deployment Successful!"
+
 
 

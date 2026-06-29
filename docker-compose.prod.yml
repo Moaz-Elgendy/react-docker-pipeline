@@ -1,0 +1,11 @@
+services:
+
+ React-app:
+
+  image: react-prod:v1
+  build: .
+  container_name: react-webapp
+  ports:
+   - "80:80"
+
+  restart: unless-stopped 
