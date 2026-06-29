@@ -1,134 +1,343 @@
-# React Docker Pipeline
+# 🚀 React Docker CI/CD Pipeline
 
-A sample React application used to demonstrate modern DevOps practices including Docker, Docker Compose, GitHub Actions Continuous Integration (CI), and Docker-based deployment workflows.
+A production-style DevOps project demonstrating the complete software delivery lifecycle for a React application using **Docker**, **GitHub Actions**, and **AWS**.
 
-## Technologies
+The project implements a complete **Continuous Integration (CI)** and **Continuous Deployment (CD)** pipeline that automatically:
+
+* Builds the application
+* Runs tests inside Docker
+* Creates a deployment artifact
+* Uploads the artifact to Amazon S3
+* Deploys the application to an AWS EC2 instance
+* Runs the production application inside a Docker container using Docker Compose
+
+---
+
+# 📖 Project Overview
+
+This project demonstrates modern DevOps practices by separating the application into two environments:
+
+* **Development Environment**
+
+  * Dockerfile.dev
+  * Docker Compose (Development)
+  * Hot Reload
+  * Dockerized Testing
+
+* **Production Environment**
+
+  * Production Dockerfile
+  * Docker Compose (Production)
+  * Nginx Container
+  * Automated Deployment via GitHub Actions
+
+---
+
+# 🏗️ Architecture
+
+![Architecture](images/architecture.png)
+
+---
+
+# ⚙️ Technologies Used
 
 * React
 * Docker
 * Docker Compose
 * GitHub Actions
+* Amazon EC2
+* Amazon S3
+* AWS IAM
+* AWS CLI
+* Ubuntu Server
 * Nginx
 * Node.js
 
-## Project Structure
+---
+
+# 📂 Project Structure
 
 ```text
 .
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml
+├── build/
+├── public/
+├── src/
 ├── Dockerfile
 ├── Dockerfile.dev
-├── docker-compose.yml
+├── docker-compose.dev.yml
+├── docker-compose.prod.yml
 ├── package.json
-└── src/
+├── package-lock.json
+├── README.md
+└── images/
 ```
 
-## Development
+---
 
-### Install dependencies
+# 💻 Development Environment
 
-```bash
-npm install
-```
+The development environment uses:
 
-### Start the development server
+* Dockerfile.dev
+* docker-compose.dev.yml
 
-```bash
-npm run start
-```
+Features:
 
-The application will be available at:
-
-```text
-http://localhost:3000
-```
-
-## Testing
-
-Run the React test suite:
-
-```bash
-npm run test
-```
-
-The GitHub Actions CI pipeline executes the tests automatically inside a Docker container.
-
-## Production Build
-
-Generate the optimized production build:
-
-```bash
-npm run build
-```
-
-The production build is placed inside the `build/` directory.
-
-## Docker
-
-### Build the development image
-
-```bash
-docker build -t react-lab:v1 -f Dockerfile.dev .
-```
-
-### Build the production image
-
-```bash
-docker build -t react-lab:prod .
-```
-
-## Docker Compose
+* Live Reload
+* Bind Mounts
+* Dockerized React Development Server
+* Dockerized Testing
 
 Start the development environment:
 
 ```bash
-docker compose up
+docker compose -f docker-compose.dev.yml up
 ```
 
-Stop the environment:
+---
 
-```bash
-docker compose down
-```
+# 🚀 Production Environment
 
-## Continuous Integration (CI)
+The production deployment uses:
 
-The project uses GitHub Actions to automate Continuous Integration.
+* Dockerfile
+* docker-compose.prod.yml
 
-Current pipeline:
+The React application is built by GitHub Actions.
 
-* Checkout repository
-* Build Docker development image
-* Run React tests inside a Docker container
+The production Docker image contains only:
 
-The workflow is located at:
+* Nginx
+* React production build
+
+No Node.js runtime exists inside the production container.
+
+---
+
+# 🔄 CI/CD Pipeline
+
+## Continuous Integration
+
+The CI workflow performs:
+
+1. Checkout Repository
+2. Build Development Docker Image
+3. Run React Tests inside Docker
+4. Install Dependencies
+5. Build Production React Files
+6. Create Deployment Artifact
+
+## Continuous Deployment
+
+After a successful build:
+
+1. Configure AWS Credentials
+2. Upload Deployment Artifact to Amazon S3
+3. SSH into AWS EC2
+4. Download Deployment Artifact
+5. Extract Deployment Package
+6. Build Production Docker Image
+7. Deploy using Docker Compose
+8. Launch the Nginx Container
+
+---
+
+# ☁️ AWS Infrastructure
+
+AWS Services used:
+
+* Amazon EC2
+* Amazon S3
+* AWS IAM
+
+The EC2 instance uses an **IAM Role** to securely access Amazon S3 without storing AWS credentials on the server.
+
+GitHub Actions authenticates to AWS using GitHub Secrets.
+
+---
+
+# 📦 Deployment Artifact
+
+GitHub Actions generates the deployment artifact:
 
 ```text
-.github/workflows/deploy.yml
+deploy.zip
+│
+├── build/
+├── Dockerfile
+└── docker-compose.prod.yml
 ```
 
-> This workflow currently implements the CI stage. Deployment (CD) will be added in a later phase.
+The EC2 instance downloads the artifact from Amazon S3 and builds the production Docker image locally.
 
-## Continuous Deployment (Planned)
+---
 
-The next phase of the project will include:
+# 🐳 Docker Overview
 
-* Build production Docker image
-* Push image to Docker Hub
-* Deploy to an AWS EC2 instance
-* Automatically update the running Docker container
+## Development
 
-## Learning Objectives
+* Dockerfile.dev
+* Docker Compose Development
+* React Development Server
+* Dockerized Testing
+
+## Production
+
+* Dockerfile
+* Docker Compose Production
+* Nginx Container
+* React Production Build
+
+---
+
+# 📸 Project Screenshots
+
+## Architecture
+
+![Architecture](images/architecture.png)
+
+---
+
+## Local React Application
+
+![Local React Application](images/react-local.png)
+
+---
+
+## Docker Images
+
+Shows the development and production Docker images.
+
+![Docker Images](images/docker-images.png)
+
+---
+
+## Docker Compose (Development)
+
+Development environment running with Docker Compose.
+
+![Docker Compose Development](images/docker-compose-dev.png)
+
+---
+
+## GitHub Repository
+
+Repository structure and project files.
+
+![GitHub Repository](images/github-repository.png)
+
+---
+
+## GitHub Actions CI/CD Pipeline
+
+Successful CI/CD workflow execution.
+
+![GitHub Actions](images/github-actions.png)
+
+---
+
+## Amazon S3 Deployment Artifact
+
+Deployment artifact uploaded successfully.
+
+![S3 Artifact](images/s3-artifact.png)
+
+---
+
+## AWS EC2 Instance
+
+Running Ubuntu EC2 instance.
+
+![EC2 Dashboard](images/ec2-dashboard.png)
+
+---
+
+## Security Group Configuration
+
+Inbound rules allowing SSH and HTTP traffic.
+
+![Security Group](images/security-group.png)
+
+---
+
+## IAM Role
+
+EC2 IAM Role with Amazon S3 permissions.
+
+![IAM Role](images/iam-role.png)
+
+---
+
+## Docker Running on EC2
+
+Production container running on the EC2 instance.
+
+![Docker on EC2](images/ec2-docker.png)
+
+---
+
+## Docker Compose on EC2
+
+Docker Compose managing the production deployment.
+
+![Docker Compose EC2](images/ec2-compose.png)
+
+---
+
+## Deployment Success
+
+Successful deployment logs from GitHub Actions.
+
+![Deployment Success](images/deployment-success.png)
+
+---
+
+## Production Website
+
+React application running from the AWS EC2 Public IP.
+
+![Production Website](images/aws-react-app.png)
+
+---
+
+# 🎯 Learning Outcomes
 
 This project demonstrates:
 
-* Containerizing React applications
-* Multi-stage Docker builds
-* Docker Compose for development
-* Bind mounts and Docker volumes
-* React testing inside Docker containers
-* GitHub Actions CI pipelines
-* Production-ready Docker images using Nginx
+* Dockerizing React Applications
+* Multi-Stage Docker Workflow
+* Docker Compose
+* GitHub Actions CI/CD
+* Automated Testing
+* Deployment Artifacts
+* Amazon S3
+* Amazon EC2
+* AWS IAM Roles
+* AWS CLI
+* SSH Automation
+* Containerized Production Deployment
+* Nginx Web Server
+* Infrastructure Automation
 
+---
+
+# 🔮 Future Improvements
+
+* GitHub OIDC Authentication
+* Docker Hub Deployment Strategy
+* Terraform Infrastructure as Code
+* Kubernetes Deployment
+* HTTPS with Let's Encrypt
+* Custom Domain with Route 53
+* Blue/Green Deployment Strategy
+
+---
+
+# 👨‍💻 Author
+
+**Moaz Mohamed**
+
+DevOps Portfolio Project
