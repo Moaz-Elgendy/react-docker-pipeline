@@ -8,9 +8,9 @@ on:
   pull_request:
    branches:
     - main
-    
+
 jobs:
-  test:
+  Test Using Dockerfile.dev:
    runs-on: ubuntu-latest
    
    steps:
@@ -22,9 +22,45 @@ jobs:
 
     - name: Run Tests
       run: docker run -e CI=true react-lab-test npm run test 
-      
-       
+  
+  Setup for deployment:
+    - name: Build Deployment Docker Image
+      run: docker build -t react-lab-deploy .
+  
+  Build Production:
+    - name: Install Dependencies
+      run: npm install
 
+    - name: Build Production Files
+      run: npm run build  
 
+    - name: Create Deployment Artifact
+      run: zip -r react-build.zip build
+
+    - name: Verify Artifact
+      run: ls -lh | grep react-build.zip
+
+  Push Artifact to S3-Bucket:
+    - name: Configure AWS Crednetials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-accesss-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-acess-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Upload Artifact to S3
+      run: aws s3 cp react-build.zip s3://${{ secrets.S3_BUCKET}}/react-build.zip
+
+  SSH and Configure EC2:
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        scripts:
+          echo "Connected to EC2!"
+          pwd
+          ls
 
 
