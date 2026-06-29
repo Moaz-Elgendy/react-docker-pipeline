@@ -45,6 +45,7 @@ This project demonstrates modern DevOps practices by separating the application 
 * Docker
 * Docker Compose
 * GitHub Actions
+* Jenkins
 * Amazon EC2
 * Amazon S3
 * AWS IAM
@@ -121,7 +122,18 @@ No Node.js runtime exists inside the production container.
 
 ## Continuous Integration
 
-The CI workflow performs:
+Two CI solutions were implemented during this project:
+
+### Jenkins (Local CI)
+
+The Jenkins pipeline demonstrates local CI by:
+
+1. Building the development Docker image
+2. Running React tests inside Docker
+
+### GitHub Actions (Cloud CI)
+
+GitHub Actions performs:
 
 1. Checkout Repository
 2. Build Development Docker Image
@@ -239,6 +251,14 @@ Successful CI/CD workflow execution.
 
 ---
 
+## Jenkins Pipeline
+
+Successful Jenkins build running locally.
+
+![Jenkins Pipeline](images/jenkins-pipeline.png)
+
+---
+
 ## Amazon S3 Deployment Artifact
 
 Deployment artifact uploaded successfully.
@@ -311,6 +331,7 @@ This project demonstrates:
 * Multi-Stage Docker Workflow
 * Docker Compose
 * GitHub Actions CI/CD
+* Jenkins Pipelines CI
 * Automated Testing
 * Deployment Artifacts
 * Amazon S3
