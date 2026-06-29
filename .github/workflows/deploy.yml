@@ -10,7 +10,7 @@ on:
     - main
 
 jobs:
-  Test Using Dockerfile.dev:
+  test-and-deploy:
    runs-on: ubuntu-latest
    
    steps:
@@ -23,11 +23,9 @@ jobs:
     - name: Run Tests
       run: docker run -e CI=true react-lab-test npm run test 
   
-  Setup for deployment:
     - name: Build Deployment Docker Image
       run: docker build -t react-lab-deploy .
-  
-  Build Production:
+
     - name: Install Dependencies
       run: npm install
 
@@ -40,7 +38,6 @@ jobs:
     - name: Verify Artifact
       run: ls -lh | grep react-build.zip
 
-  Push Artifact to S3-Bucket:
     - name: Configure AWS Crednetials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -51,7 +48,6 @@ jobs:
     - name: Upload Artifact to S3
       run: aws s3 cp react-build.zip s3://${{ secrets.S3_BUCKET}}/react-build.zip
 
-  SSH and Configure EC2:
     - name: Deploy to EC2
       uses: appleboy/ssh-action@v1.0.3
       with:
